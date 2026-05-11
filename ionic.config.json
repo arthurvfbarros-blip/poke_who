@@ -1,0 +1,7 @@
+{
+  "name": "Poke_who",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
