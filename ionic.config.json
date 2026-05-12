@@ -1,7 +1,5 @@
 {
-  "name": "Poke_who",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
+  "name": "New Ionic App",
+  "integrations": {},
+  "type": "angular"
 }
