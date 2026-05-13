@@ -1,20 +1,145 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+  <ion-toolbar color="danger">
+    <ion-title>Quem é esse Pokémon? 🎮</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="game-container">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    @if (loading) {
+      <div class="loading-wrapper">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Carregando Pokémon…</p>
+      </div>
+    }
+
+    @if (!loading && secretPokemon) {
+      <div class="image-wrapper">
+        <img
+          [src]="secretPokemon.image"
+          [alt]="won ? secretPokemon.name : '???'"
+          [class.silhouette]="!won"
+          class="pokemon-image"
+        />
+        @if (won) {
+          <p class="pokemon-name">{{ formatName(secretPokemon.name) }}</p>
+          <p class="pokemon-id">#{{ secretPokemon.id }}</p>
+        }
+      </div>
+
+      @if (won) {
+        <div class="victory-banner">
+          <h2>🎉 Você acertou!</h2>
+          <p>Foram necessárias <strong>{{ guesses.length }}</strong> tentativa(s).</p>
+          <ion-button expand="block" color="success" (click)="newGame()">
+            Novo Jogo
+          </ion-button>
+        </div>
+      }
+
+      @if (!won) {
+        <div class="input-area">
+          <form (submit)="submitGuess($event)">
+            <ion-input
+              placeholder="Nome do Pokémon…"
+              [value]="guessInput"
+              (ionInput)="onGuessInput($event)"
+              [disabled]="guessing"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              fill="outline"
+            ></ion-input>
+            <ion-button
+              type="submit"
+              expand="block"
+              color="primary"
+              [disabled]="guessing || !guessInput.trim()"
+            >
+              @if (guessing) {
+                <ion-spinner name="crescent" slot="start"></ion-spinner>
+              }
+              Adivinhar
+            </ion-button>
+          </form>
+          @if (errorMsg) {
+            <p class="error-msg">{{ errorMsg }}</p>
+          }
+        </div>
+      }
+
+      <p class="attempt-counter">
+        Tentativas: <strong>{{ guesses.length }}</strong>
+      </p>
+
+      @if (guesses.length > 0) {
+        <div class="history-header">
+          <span>Nome</span>
+          <span>Geração</span>
+          <span>Tipos</span>
+          <span>Altura</span>
+          <span>Peso</span>
+        </div>
+
+        <div class="guess-history">
+          @for (g of guesses; track $index) {
+            <div class="guess-row">
+              <span class="guess-name">{{ formatName(g.pokemon.name) }}</span>
+
+              <span class="cell" [class]="'cell--' + g.comparison.generation">
+                {{ g.pokemon.generation }}
+                @if (g.comparison.generation === 'higher') {
+                  <ion-icon name="arrow-up"></ion-icon>
+                } @else if (g.comparison.generation === 'lower') {
+                  <ion-icon name="arrow-down"></ion-icon>
+                } @else {
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                }
+              </span>
+
+              <span class="cell" [class]="'cell--' + g.comparison.types">
+                {{ g.pokemon.types.join(' / ') }}
+                @if (g.comparison.types === 'correct') {
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                }
+              </span>
+
+              <span class="cell" [class]="'cell--' + g.comparison.height">
+                {{ g.pokemon.height.toFixed(1) }}m
+                @if (g.comparison.height === 'higher') {
+                  <ion-icon name="arrow-up"></ion-icon>
+                } @else if (g.comparison.height === 'lower') {
+                  <ion-icon name="arrow-down"></ion-icon>
+                } @else {
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                }
+              </span>
+
+              <span class="cell" [class]="'cell--' + g.comparison.weight">
+                {{ g.pokemon.weight.toFixed(1) }}kg
+                @if (g.comparison.weight === 'higher') {
+                  <ion-icon name="arrow-up"></ion-icon>
+                } @else if (g.comparison.weight === 'lower') {
+                  <ion-icon name="arrow-down"></ion-icon>
+                } @else {
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                }
+              </span>
+            </div>
+          }
+        </div>
+      }
+    }
+
+    @if (!loading && !secretPokemon && errorMsg) {
+      <div class="error-state">
+        <p>{{ errorMsg }}</p>
+        <ion-button color="danger" (click)="loadNewPokemon()">Tentar Novamente</ion-button>
+      </div>
+    }
+
   </div>
 </ion-content>
+
