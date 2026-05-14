@@ -64,6 +64,16 @@
               Adivinhar
             </ion-button>
           </form>
+          @if (suggestions.length > 0) {
+            <ul class="suggestions">
+              @for (s of suggestions; track s.name) {
+                <li (click)="selectSuggestion(s)">
+                  <img [src]="s.image" alt="" class="suggestion-image">
+                  {{ formatName(s.name) }}
+                </li>
+              }
+            </ul>
+          }
           @if (errorMsg) {
             <p class="error-msg">{{ errorMsg }}</p>
           }

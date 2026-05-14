@@ -30,6 +30,7 @@ const TOTAL_POKEMON = 1350;
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
   private readonly http = inject(HttpClient);
+  private allNames: string[] = [];
 
   getRandomPokemon(): Observable<Pokemon> {
     const id = Math.floor(Math.random() * TOTAL_POKEMON) + 1;
@@ -42,6 +43,23 @@ export class PokemonService {
     return this.http
       .get<any>(`https://pokeapi.co/api/v2/pokemon/${idOrName}`)
       .pipe(map((data: any) => this.mapToPokemon(data)));
+  }
+
+  loadAllNames(): Observable<void> {
+    return this.http.get<any>('https://pokeapi.co/api/v2/pokemon?limit=1350').pipe(
+      map(data => {
+        this.allNames = data.results.map((p: any) => p.name);
+      })
+    );
+  }
+
+  getSuggestions(prefix: string): string[] {
+    if (!prefix.trim()) return [];
+    return this.allNames.filter(name => name.toLowerCase().startsWith(prefix.toLowerCase())).slice(0, 6);
+  }
+
+  getPokemonImage(name: string): Observable<string> {
+    return this.fetchPokemon(name).pipe(map(p => p.image));
   }
 
   private mapToPokemon(data: any): Pokemon {

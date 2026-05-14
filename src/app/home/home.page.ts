@@ -11,6 +11,8 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowUp, arrowDown, checkmarkOutline } from 'ionicons/icons';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { PokemonService, Pokemon } from '../services/pokemon.service';
 
@@ -50,6 +52,7 @@ export class HomePage implements OnInit {
   secretPokemon: Pokemon | null = null;
   guesses: GuessResult[] = [];
   guessInput = '';
+  suggestions: { name: string; image: string }[] = [];
   won = false;
   loading = true;
   guessing = false;
@@ -60,6 +63,7 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit(): void {
+    this.pokemonService.loadAllNames().subscribe();
     this.loadNewPokemon();
   }
 
@@ -85,6 +89,19 @@ export class HomePage implements OnInit {
 
   onGuessInput(event: Event): void {
     this.guessInput = (event as CustomEvent).detail.value ?? '';
+    const names = this.pokemonService.getSuggestions(this.guessInput);
+    if (names.length > 0) {
+      const imageObservables = names.map(name =>
+        this.pokemonService.getPokemonImage(name).pipe(
+          map(image => ({ name, image }))
+        )
+      );
+      forkJoin(imageObservables).subscribe(data => {
+        this.suggestions = data;
+      });
+    } else {
+      this.suggestions = [];
+    }
   }
 
   submitGuess(event?: Event): void {
@@ -109,6 +126,11 @@ export class HomePage implements OnInit {
         this.errorMsg = 'Pokémon não encontrado. Verifique o nome e tente novamente.';
       },
     });
+  }
+
+  selectSuggestion(suggestion: { name: string; image: string }): void {
+    this.guessInput = suggestion.name;
+    this.suggestions = [];
   }
 
   newGame(): void {
