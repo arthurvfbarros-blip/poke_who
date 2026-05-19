@@ -6,9 +6,8 @@ import {Pipe, PipeTransform} from '@angular/core'
 })
 
 export class PokemonTypePipe implements PipeTransform {
-  transform(types: string[]): string {
-    if (!types || !Array.isArray(types)) return '';
-
+  transform(type: string): string {
+    if (!type) return '';
     const typeDictionary: { [key: string]: string } = {
       normal: '⚪ Normal',
       fire: '🔥 Fogo',
@@ -30,6 +29,6 @@ export class PokemonTypePipe implements PipeTransform {
       fairy: '✨ Fada'
     };
 
-    return types.map(t => typeDictionary[t.toLowerCase()] || t).join(' / ');
+    return typeDictionary[type.toLowerCase()] || type;
   }
 }

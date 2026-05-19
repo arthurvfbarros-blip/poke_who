@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { PokemonTypePipe } from './Tipagem-pokemon.pipe';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import {
   IonHeader,
   IonToolbar,
@@ -19,11 +21,14 @@ import { map } from 'rxjs/operators';
 import { PokemonService, Pokemon } from '../services/pokemon.service';
 
 export type CompareResult = 'correct' | 'higher' | 'lower';
-export type TypesResult = 'correct' | 'partial' | 'wrong';
+export interface TypeComparison {
+  name: string;
+  status: 'correct' | 'partial' | 'wrong';
+}
 
 export interface GuessComparison {
   generation: CompareResult;
-  types: TypesResult;
+  types: TypeComparison[];
   height: CompareResult;
   weight: CompareResult;
 }
@@ -52,6 +57,7 @@ export interface GuessResult {
 })
 export class HomePage implements OnInit {
   private readonly pokemonService = inject(PokemonService);
+  private searchSubject = new Subject<string>();
 
   secretPokemon: Pokemon | null = null;
   guesses: GuessResult[] = [];
@@ -69,6 +75,12 @@ export class HomePage implements OnInit {
   ngOnInit(): void {
     this.pokemonService.loadAllNames().subscribe();
     this.loadNewPokemon();
+    this.searchSubject.pipe(
+      debounceTime(400), // Aguarda 400ms após parar de digitar
+      distinctUntilChanged() // Só avança se o texto for diferente da última busca
+    ).subscribe(searchText => {
+      this.fetchSuggestions(searchText);
+    });
   }
 
   loadNewPokemon(): void {
@@ -93,7 +105,11 @@ export class HomePage implements OnInit {
 
   onGuessInput(event: Event): void {
     this.guessInput = (event as CustomEvent).detail.value ?? '';
-    const names = this.pokemonService.getSuggestions(this.guessInput);
+    this.searchSubject.next(this.guessInput);
+  }
+
+  private fetchSuggestions(searchText: string): void {
+    const names = this.pokemonService.getSuggestions(searchText);
     if (names.length > 0) {
       const imageObservables = names.map(name =>
         this.pokemonService.getPokemonImage(name).pipe(
@@ -107,6 +123,7 @@ export class HomePage implements OnInit {
       this.suggestions = [];
     }
   }
+
 
   submitGuess(event?: Event): void {
     event?.preventDefault();
@@ -152,7 +169,7 @@ export class HomePage implements OnInit {
     const secret = this.secretPokemon!;
     return {
       generation: this.compareNum(guessed.generation, secret.generation),
-      types: this.compareTypes(guessed.types, secret.types),
+      types: this.compareTypesIndividually(guessed.types, secret.types),
       height: this.compareNum(guessed.height, secret.height),
       weight: this.compareNum(guessed.weight, secret.weight),
     };
@@ -163,12 +180,29 @@ export class HomePage implements OnInit {
     return guessed < secret ? 'higher' : 'lower';
   }
 
-  private compareTypes(guessed: string[], secret: string[]): TypesResult {
-    const secretSet = new Set(secret);
-    const matches = guessed.filter((t) => secretSet.has(t)).length;
-    if (matches === secret.length && guessed.length === secret.length) { return 'correct'; }
-    if (matches > 0) { return 'partial'; }
-    return 'wrong';
+  private compareTypesIndividually(guessed: string[], secret: string[]): TypeComparison[] {
+    // Se o Pokémon tem só 1 tipo, duplicamos para preencher os dois blocos
+    const gTypes = guessed.length === 1 ? [guessed[0], guessed[0]] : [guessed[0], guessed[1]];
+    const sTypes = secret.length === 1 ? [secret[0], secret[0]] : [secret[0], secret[1]];
+
+    const result: TypeComparison[] = [];
+
+    if (gTypes[0] === sTypes[0]) {
+      result.push({ name: gTypes[0], status: 'correct' }); // Posição certa (Verde)
+    } else if (gTypes[0] === sTypes[1]) {
+      result.push({ name: gTypes[0], status: 'partial' }); // Posição errada (Amarelo)
+    } else {
+      result.push({ name: gTypes[0], status: 'wrong' });   // Não tem (Vermelho)
+    }
+
+    if (gTypes[1] === sTypes[1]) {
+      result.push({ name: gTypes[1], status: 'correct' }); // Posição certa (Verde)
+    } else if (gTypes[1] === sTypes[0]) {
+      result.push({ name: gTypes[1], status: 'partial' }); // Posição errada (Amarelo)
+    } else {
+      result.push({ name: gTypes[1], status: 'wrong' });   // Não tem (Vermelho)
+    }
+
+    return result;
   }
 }
-

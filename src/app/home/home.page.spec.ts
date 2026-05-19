@@ -1,3 +1,4 @@
+/// <reference types="jasmine" />
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { provideIonicAngular } from '@ionic/angular/standalone';
@@ -21,12 +22,21 @@ describe('HomePage', () => {
   let pokemonServiceSpy: jasmine.SpyObj<PokemonService>;
 
   beforeEach(async () => {
+    // 1. Adicionamos os métodos novos ao Spy (dublê)
     pokemonServiceSpy = jasmine.createSpyObj('PokemonService', [
       'getRandomPokemon',
       'fetchPokemon',
+      'loadAllNames',
+      'getSuggestions',
+      'getPokemonImage'
     ]);
+
+    // 2. Simulamos o retorno das requisições para evitar erros de "undefined" ou "subscribe is not a function"
     pokemonServiceSpy.getRandomPokemon.and.returnValue(of(mockPokemon));
     pokemonServiceSpy.fetchPokemon.and.returnValue(of(mockPokemon));
+    pokemonServiceSpy.loadAllNames.and.returnValue(of([] as any));
+    pokemonServiceSpy.getSuggestions.and.returnValue([]);
+    pokemonServiceSpy.getPokemonImage.and.returnValue(of(''));
 
     await TestBed.configureTestingModule({
       imports: [HomePage],
@@ -66,8 +76,17 @@ describe('HomePage', () => {
 
   it('should reset state on newGame', () => {
     component.won = true;
-    component.guesses = [{ pokemon: mockPokemon, comparison: { generation: 'correct', types: 'correct', height: 'correct', weight: 'correct' } }];
+    component.guesses = [{ 
+      pokemon: mockPokemon, 
+      comparison: { 
+        generation: 'correct', 
+        types: [{ name: 'electric', status: 'correct' }], 
+        height: 'correct', 
+        weight: 'correct' 
+      } 
+    }];    
     component.newGame();
+    
     expect(pokemonServiceSpy.getRandomPokemon).toHaveBeenCalledTimes(2);
     expect(component.won).toBeFalse();
     expect(component.guesses.length).toBe(0);
@@ -78,4 +97,3 @@ describe('HomePage', () => {
     expect(component.formatName('pikachu')).toBe('Pikachu');
   });
 });
-

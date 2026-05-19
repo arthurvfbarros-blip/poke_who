@@ -216,3 +216,34 @@
   text-align: center;
   padding: 48px 0;
 }
+
+// Célula tipagem
+
+.type-cell-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: transparent; // Remove a cor padrão da célula para focar nos badges
+}
+
+.type-badge {
+  font-size: 0.7rem;
+  padding: 4px;
+  border-radius: 4px;
+  width: 100%;
+  
+  &--correct {
+    background: var(--ion-color-success);
+    color: var(--ion-color-success-contrast);
+  }
+
+  &--partial {
+    background: var(--ion-color-warning); // Amarelo nativo do Ionic
+    color: var(--ion-color-warning-contrast);
+  }
+
+  &--wrong {
+    background: var(--ion-color-danger);
+    color: var(--ion-color-danger-contrast);
+  }
+}

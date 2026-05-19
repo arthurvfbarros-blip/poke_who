@@ -109,11 +109,12 @@
                 }
               </span>
 
-              <span class="cell" [class]="'cell--' + g.comparison.types">
-                {{ g.pokemon.types | pokemonType}}
-                @if (g.comparison.types === 'correct') {
-                  <ion-icon name="checkmark-outline"></ion-icon>
-                }
+              <span class="cell type-cell-container">
+                  @for (t of g.comparison.types; track t.name) {
+                  <div class="type-badge" [class]="'type-badge--' + t.status">
+                    {{ t.name | pokemonType }}
+                  </div>
+                  }
               </span>
 
               <span class="cell" [class]="'cell--' + g.comparison.height">
