@@ -68,7 +68,7 @@ export class PokemonService {
     return {
       id: data.id as number,
       name: data.name as string,
-      generation: this.detectGeneration(data.sprites),
+      generation: this.detectGeneration(data.id), // 👈 Mude de data.sprites para data.id
       types: (data.types as any[]).map((t) => t.type.name as string),
       height: (data.height as number) / 10,
       weight: (data.weight as number) / 10,
@@ -76,16 +76,16 @@ export class PokemonService {
     };
   }
 
-  private detectGeneration(sprites: any): number {
-    const versions = sprites?.versions ?? {};
-    for (let i = 0; i < GENERATIONS.length; i++) {
-      const gen = versions[GENERATIONS[i]];
-      if (!gen) { continue; }
-      const hasImage = Object.values(gen).some(
-        (game: any) => game?.front_default != null
-      );
-      if (hasImage) { return i + 1; }
-    }
-    return 0;
+  // Substitua a função inteira por esta:
+  private detectGeneration(id: number): number {
+    if (id <= 151) return 1; // Kanto
+    if (id <= 251) return 2; // Johto
+    if (id <= 386) return 3; // Hoenn
+    if (id <= 493) return 4; // Sinnoh
+    if (id <= 649) return 5; // Unova
+    if (id <= 721) return 6; // Kalos
+    if (id <= 809) return 7; // Alola
+    if (id <= 905) return 8; // Galar / Hisui
+    return 9;                // Paldea
   }
 }

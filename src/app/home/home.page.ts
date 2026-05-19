@@ -58,6 +58,11 @@ export interface GuessResult {
 export class HomePage implements OnInit {
   private readonly pokemonService = inject(PokemonService);
   private searchSubject = new Subject<string>();
+  showSilhouette = false;
+
+  toggleSilhouette(): void {
+    this.showSilhouette = !this.showSilhouette;
+  }
 
   secretPokemon: Pokemon | null = null;
   guesses: GuessResult[] = [];
@@ -76,8 +81,8 @@ export class HomePage implements OnInit {
     this.pokemonService.loadAllNames().subscribe();
     this.loadNewPokemon();
     this.searchSubject.pipe(
-      debounceTime(400), // Aguarda 400ms após parar de digitar
-      distinctUntilChanged() // Só avança se o texto for diferente da última busca
+      debounceTime(100),
+      distinctUntilChanged()
     ).subscribe(searchText => {
       this.fetchSuggestions(searchText);
     });
@@ -90,6 +95,7 @@ export class HomePage implements OnInit {
     this.guessInput = '';
     this.errorMsg = null;
     this.secretPokemon = null;
+    this.showSilhouette = false;
 
     this.pokemonService.getRandomPokemon().subscribe({
       next: (pokemon) => {

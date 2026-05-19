@@ -5,28 +5,24 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="game-container">
+<div class="game-container">
 
-    @if (loading) {
-      <div class="loading-wrapper">
-        <ion-spinner name="crescent"></ion-spinner>
-        <p>Carregando Pokémon…</p>
-      </div>
-    }
+  @if (!loading && secretPokemon && !won) {
+    <div style="display: flex; justify-content: center; margin-bottom: 12px;">
+      <ion-button color="medium" fill="outline" size="small" (click)="toggleSilhouette()">
+        {{ showSilhouette ? 'Ocultar Silhueta' : 'Facilitar (Mostrar Silhueta)' }}
+      </ion-button>
+    </div>
+  }
 
-    @if (!loading && secretPokemon) {
-      <div class="image-wrapper">
-        <img
-          [src]="secretPokemon.image"
-          [alt]="won ? secretPokemon.name : '???'"
-          [class.silhouette]="!won"
-          class="pokemon-image"
-        />
-        @if (won) {
-          <p class="pokemon-name">{{ formatName(secretPokemon.name) }}</p>
-          <p class="pokemon-id">#{{ secretPokemon.id }}</p>
-        }
-      </div>
+  @if (!loading && secretPokemon) {
+    <div class="image-wrapper">
+      <img
+        [src]="secretPokemon.image"
+        [alt]="won ? secretPokemon.name : '???'"
+        [class.silhouette]="!won"
+        [class.hide-silhouette]="!showSilhouette && !won" class="pokemon-image"
+      />
 
       @if (won) {
         <div class="victory-banner">
@@ -96,61 +92,58 @@
         <div class="guess-history">
           @for (g of guesses; track $index) {
             <div class="guess-row">
-              <span class="guess-name">{{ formatName(g.pokemon.name) }}</span>
+            <span class="guess-name">
+              <img [src]="g.pokemon.image" [alt]="g.pokemon.name" class="history-image">
+              {{ formatName(g.pokemon.name) }}
+            </span>
 
-              <span class="cell" [class]="'cell--' + g.comparison.generation">
-                {{ g.pokemon.generation }}
-                @if (g.comparison.generation === 'higher') {
-                  <ion-icon name="arrow-up"></ion-icon>
-                } @else if (g.comparison.generation === 'lower') {
-                  <ion-icon name="arrow-down"></ion-icon>
-                } @else {
-                  <ion-icon name="checkmark-outline"></ion-icon>
-                }
-              </span>
+            <span class="cell" [class]="'cell--' + g.comparison.generation">
+              {{ g.pokemon.generation }}
+              @if (g.comparison.generation === 'higher') {
+                <ion-icon name="arrow-up"></ion-icon>
+              } @else if (g.comparison.generation === 'lower') {
+                <ion-icon name="arrow-down"></ion-icon>
+              } @else {
+                <ion-icon name="checkmark-outline"></ion-icon>
+              }
+            </span>
 
-              <span class="cell type-cell-container">
-                  @for (t of g.comparison.types; track t.name) {
-                  <div class="type-badge" [class]="'type-badge--' + t.status">
-                    {{ t.name | pokemonType }}
-                  </div>
-                  }
-              </span>
+            <span class="cell type-cell-container">
+              @for (t of g.comparison.types; track t.name) {
+                <div class="type-badge" [class]="'type-badge--' + t.status">
+                  {{ t.name | pokemonType }}
+                </div>
+              }
+            </span>
 
-              <span class="cell" [class]="'cell--' + g.comparison.height">
-                {{ g.pokemon.height | number: '1.1-1' }}m
-                @if (g.comparison.height === 'higher') {
-                  <ion-icon name="arrow-up"></ion-icon>
-                } @else if (g.comparison.height === 'lower') {
-                  <ion-icon name="arrow-down"></ion-icon>
-                } @else {
-                  <ion-icon name="checkmark-outline"></ion-icon>
-                }
-              </span>
+            <span class="cell" [class]="'cell--' + g.comparison.height">
+              {{ g.pokemon.height | number: '1.1-1' }}m
+              @if (g.comparison.height === 'higher') {
+                <ion-icon name="arrow-up"></ion-icon>
+              } @else if (g.comparison.height === 'lower') {
+                <ion-icon name="arrow-down"></ion-icon>
+              } @else {
+                <ion-icon name="checkmark-outline"></ion-icon>
+              }
+            </span>
 
-              <span class="cell" [class]="'cell--' + g.comparison.weight">
-                {{ g.pokemon.weight | number: '1.1-1' }}kg
-                @if (g.comparison.weight === 'higher') {
-                  <ion-icon name="arrow-up"></ion-icon>
-                } @else if (g.comparison.weight === 'lower') {
-                  <ion-icon name="arrow-down"></ion-icon>
-                } @else {
-                  <ion-icon name="checkmark-outline"></ion-icon>
-                }
-              </span>
-            </div>
-          }
-        </div>
-      }
-    }
+            <span class="cell" [class]="'cell--' + g.comparison.weight">
+              {{ g.pokemon.weight | number: '1.1-1' }}kg
+              @if (g.comparison.weight === 'higher') {
+                <ion-icon name="arrow-up"></ion-icon>
+              } @else if (g.comparison.weight === 'lower') {
+                <ion-icon name="arrow-down"></ion-icon>
+              } @else {
+                <ion-icon name="checkmark-outline"></ion-icon>
+              }
+            </span>
+          </div>
+          } </div> } </div> } @if (!loading && !secretPokemon && errorMsg) {
+    <div class="error-state">
+      <p>{{ errorMsg }}</p>
+      <ion-button color="danger" (click)="loadNewPokemon()">Tentar Novamente</ion-button>
+    </div>
+  }
 
-    @if (!loading && !secretPokemon && errorMsg) {
-      <div class="error-state">
-        <p>{{ errorMsg }}</p>
-        <ion-button color="danger" (click)="loadNewPokemon()">Tentar Novamente</ion-button>
-      </div>
-    }
-
-  </div>
-</ion-content>
+</div> </ion-content>
 

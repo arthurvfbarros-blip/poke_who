@@ -53,6 +53,29 @@
   }
 }
 
+.hide-silhouette {
+  opacity: 0 !important; // Torna a imagem invisível, mas mantém o espaço dela
+  pointer-events: none;  // Evita que o usuário tente arrastar ou clicar na imagem invisível
+}
+
+.guess-name {
+  display: flex;
+  align-items: center; // Centraliza a imagem e o texto verticalmente
+  gap: 8px; // Espaço entre a imagem e o nome
+  font-weight: 600;
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-image {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0; // Impede a imagem de ser espremida se o nome for grande
+}
+
 // Victory banner
 
 .victory-banner {
@@ -137,14 +160,16 @@
 
 .history-header {
   display: grid;
-  grid-template-columns: 2fr 1fr 2fr 1fr 1.2fr;
-  gap: 4px;
+  // Aumentamos a primeira coluna para 2.8fr e equilibramos o resto:
+  grid-template-columns: 2.8fr 1fr 1.5fr 1fr 1.2fr;
+  gap: 6px; // Um respiro um pouquinho maior entre as colunas
   padding: 4px 8px;
   font-size: 0.7rem;
   font-weight: 600;
   color: var(--ion-color-medium);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  text-align: center; // Centraliza os títulos
 }
 
 .guess-history {
@@ -155,8 +180,8 @@
 
 .guess-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 2fr 1fr 1.2fr;
-  gap: 4px;
+  grid-template-columns: 2.8fr 1fr 1.5fr 1fr 1.2fr;
+  gap: 6px;
   align-items: center;
   padding: 8px;
   border-radius: 10px;
@@ -164,6 +189,10 @@
 }
 
 .guess-name {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; // Garante que fique alinhado à esquerda
+  gap: 8px;
   font-weight: 600;
   font-size: 0.85rem;
   overflow: hidden;
@@ -247,3 +276,4 @@
     color: var(--ion-color-danger-contrast);
   }
 }
+
