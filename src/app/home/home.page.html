@@ -110,14 +110,14 @@
               </span>
 
               <span class="cell" [class]="'cell--' + g.comparison.types">
-                {{ g.pokemon.types.join(' / ') }}
+                {{ g.pokemon.types | pokemonType}}
                 @if (g.comparison.types === 'correct') {
                   <ion-icon name="checkmark-outline"></ion-icon>
                 }
               </span>
 
               <span class="cell" [class]="'cell--' + g.comparison.height">
-                {{ g.pokemon.height.toFixed(1) }}m
+                {{ g.pokemon.height | number: '1.1-1' }}m
                 @if (g.comparison.height === 'higher') {
                   <ion-icon name="arrow-up"></ion-icon>
                 } @else if (g.comparison.height === 'lower') {
@@ -128,7 +128,7 @@
               </span>
 
               <span class="cell" [class]="'cell--' + g.comparison.weight">
-                {{ g.pokemon.weight.toFixed(1) }}kg
+                {{ g.pokemon.weight | number: '1.1-1' }}kg
                 @if (g.comparison.weight === 'higher') {
                   <ion-icon name="arrow-up"></ion-icon>
                 } @else if (g.comparison.weight === 'lower') {

@@ -1,4 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { PokemonTypePipe } from './Tipagem-pokemon.pipe';
 import {
   IonHeader,
   IonToolbar,
@@ -44,6 +46,8 @@ export interface GuessResult {
     IonButton,
     IonSpinner,
     IonIcon,
+    DecimalPipe,
+    PokemonTypePipe,
   ],
 })
 export class HomePage implements OnInit {
