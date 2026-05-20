@@ -1,9 +1,29 @@
+ion-input {
+  --background: #ffffff ;        
+  --border-radius: 12px;        
+  --border-color: transparent;   
+  --placeholder-color: #333 ;
+  --placeholder-opacity: 1 ;        
+}
+
+
+ion-toolbar {
+  --background: #252b44 !important;  // Verde escuro
+  --color: #ffffff !important;        // Letra branca
+}
 .game-container {
   padding: 16px;
   max-width: 600px;
   margin: 0 auto;
+  color: #333;   
+  font-weight: bold; 
 }
-
+.btn-facilitar {
+  --color: #333333 ;
+  --border-color: #333333 ;
+  font-weight: bold ;
+  transition: all 0.3s ease;
+}
 // Loading
 
 .loading-wrapper {
@@ -67,6 +87,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  
 }
 
 .history-image {
@@ -99,6 +120,7 @@
 
 .input-area {
   margin-bottom: 4px;
+  
 
   form {
     display: flex;
@@ -115,7 +137,7 @@
   border-radius: 4px;
   max-height: 200px;
   overflow-y: auto;
-  background: var(--ion-color-light);
+  background: #ffffff;
 
   li {
     padding: 8px 12px;
@@ -124,14 +146,13 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    
 
     &:last-child {
       border-bottom: none;
     }
 
-    &:hover {
-      background: var(--ion-color-light-tint);
-    }
+    
   }
 }
 
@@ -152,8 +173,10 @@
 .attempt-counter {
   text-align: center;
   font-size: 0.9rem;
-  color: var(--ion-color-medium);
+  color:  #333; 
   margin: 12px 0 8px;
+  font-weight: bold;   
+
 }
 
 // Guess history
@@ -166,10 +189,11 @@
   padding: 4px 8px;
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--ion-color-medium);
+  color: #333;   
   text-transform: uppercase;
   letter-spacing: 0.04em;
   text-align: center; // Centraliza os títulos
+  font-weight: bold;     
 }
 
 .guess-history {
@@ -185,7 +209,8 @@
   align-items: center;
   padding: 8px;
   border-radius: 10px;
-  background: var(--ion-color-light);
+  background: #ffffff;  
+  border: 1px solid #eee;
 }
 
 .guess-name {
@@ -198,6 +223,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: #000000; 
 }
 
 .cell {
@@ -276,4 +302,7 @@
     color: var(--ion-color-danger-contrast);
   }
 }
-
+// COR DE FUNDO DA PÁGINA
+ion-content {
+  --background: #F8F8FF;
+}

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, HostListener, HostBinding   } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { PokemonTypePipe } from './Tipagem-pokemon.pipe';
 import { Subject } from 'rxjs';
@@ -19,6 +19,7 @@ import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { PokemonService, Pokemon } from '../services/pokemon.service';
+import { HoverHighlightDirective } from '../directives/hover-highlight.directive';
 
 export type CompareResult = 'correct' | 'higher' | 'lower';
 export interface TypeComparison {
@@ -53,6 +54,7 @@ export interface GuessResult {
     IonIcon,
     DecimalPipe,
     PokemonTypePipe,
+    HoverHighlightDirective,
   ],
 })
 export class HomePage implements OnInit {
@@ -63,6 +65,7 @@ export class HomePage implements OnInit {
   toggleSilhouette(): void {
     this.showSilhouette = !this.showSilhouette;
   }
+  
 
   secretPokemon: Pokemon | null = null;
   guesses: GuessResult[] = [];
@@ -72,7 +75,8 @@ export class HomePage implements OnInit {
   loading = true;
   guessing = false;
   errorMsg: string | null = null;
-
+  
+  
   constructor() {
     addIcons({ arrowUp, arrowDown, checkmarkOutline });
   }
@@ -158,6 +162,7 @@ export class HomePage implements OnInit {
   selectSuggestion(suggestion: { name: string; image: string }): void {
     this.guessInput = suggestion.name;
     this.suggestions = [];
+    this.submitGuess(new Event('submit'));
   }
 
   newGame(): void {
@@ -211,4 +216,5 @@ export class HomePage implements OnInit {
 
     return result;
   }
+  
 }

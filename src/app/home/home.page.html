@@ -1,6 +1,8 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="danger">
-    <ion-title>Quem é esse Pokémon? 🎮</ion-title>
+
+
+<ion-header [translucent]="true" >
+  <ion-toolbar  class="ion-text-center" >
+    <ion-title>Quem é esse Pokémon? </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -9,7 +11,10 @@
 
   @if (!loading && secretPokemon && !won) {
     <div style="display: flex; justify-content: center; margin-bottom: 12px;">
-      <ion-button color="medium" fill="outline" size="small" (click)="toggleSilhouette()">
+      <ion-button appHoverHighlight
+       class="btn-facilitar"           
+       fill="outline" size="small" 
+       (click)="toggleSilhouette()">
         {{ showSilhouette ? 'Ocultar Silhueta' : 'Facilitar (Mostrar Silhueta)' }}
       </ion-button>
     </div>
@@ -38,27 +43,21 @@
         <div class="input-area">
           <form (submit)="submitGuess($event)">
             <ion-input
-              placeholder="Nome do Pokémon…"
+              placeholder="Escreva aqui..."
               [value]="guessInput"
               (ionInput)="onGuessInput($event)"
+              (keyup.enter)="submitGuess($event)" 
               [disabled]="guessing"
               autocomplete="off"
               autocorrect="off"
               autocapitalize="off"
               spellcheck="false"
+              shape="round"
               fill="outline"
             ></ion-input>
-            <ion-button
-              type="submit"
-              expand="block"
-              color="primary"
-              [disabled]="guessing || !guessInput.trim()"
-            >
-              @if (guessing) {
-                <ion-spinner name="crescent" slot="start"></ion-spinner>
-              }
-              Adivinhar
-            </ion-button>
+           
+            
+            
           </form>
           @if (suggestions.length > 0) {
             <ul class="suggestions">
