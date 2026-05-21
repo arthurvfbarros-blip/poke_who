@@ -1,5 +1,3 @@
-
-
 <ion-header [translucent]="true" >
   <ion-toolbar  class="ion-text-center" >
     <ion-title>Quem é esse Pokémon? </ion-title>
@@ -143,6 +141,12 @@
       <ion-button color="danger" (click)="loadNewPokemon()">Tentar Novamente</ion-button>
     </div>
   }
-
-</div> </ion-content>
+    
+</div> 
+<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+<ion-fab-button color="tertiary" (click)="abrirPokedex()">
+  <ion-icon name="book-outline"></ion-icon>
+</ion-fab-button>
+</ion-fab>
+</ion-content>
 

@@ -3,6 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { PokemonTypePipe } from './Tipagem-pokemon.pipe';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import {
   IonHeader,
   IonToolbar,
@@ -11,10 +12,9 @@ import {
   IonInput,
   IonButton,
   IonSpinner,
-  IonIcon,
-} from '@ionic/angular/standalone';
+  IonIcon, IonFab, IonFabButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowUp, arrowDown, checkmarkOutline } from 'ionicons/icons';
+import { arrowUp, arrowDown, checkmarkOutline, bookOutline } from 'ionicons/icons';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -55,11 +55,14 @@ export interface GuessResult {
     DecimalPipe,
     PokemonTypePipe,
     HoverHighlightDirective,
+    IonFab,
+    IonFabButton,
   ],
 })
 export class HomePage implements OnInit {
   private readonly pokemonService = inject(PokemonService);
   private searchSubject = new Subject<string>();
+  private readonly router = inject(Router);
   showSilhouette = false;
 
   toggleSilhouette(): void {
@@ -78,7 +81,7 @@ export class HomePage implements OnInit {
   
   
   constructor() {
-    addIcons({ arrowUp, arrowDown, checkmarkOutline });
+    addIcons({ arrowUp, arrowDown, checkmarkOutline, bookOutline });
   }
 
   ngOnInit(): void {
@@ -167,6 +170,12 @@ export class HomePage implements OnInit {
 
   newGame(): void {
     this.loadNewPokemon();
+  }
+
+  abrirPokedex():void {
+    if (this.secretPokemon) {
+      this.router.navigate(['/pokedex'])
+    }
   }
 
   formatName(name: string): string {
