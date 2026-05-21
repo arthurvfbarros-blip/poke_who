@@ -100,6 +100,10 @@ export class PokemonService {
     return data ? JSON.parse(data):[];
   }
 
+  limparEstatisticas(): void {
+    localStorage.removeItem('pokedle_stats');
+  }
+
 }
 
 export interface GameStat {

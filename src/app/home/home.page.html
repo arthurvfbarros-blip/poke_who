@@ -44,7 +44,6 @@
               placeholder="Escreva aqui..."
               [value]="guessInput"
               (ionInput)="onGuessInput($event)"
-              (keyup.enter)="submitGuess($event)" 
               [disabled]="guessing"
               autocomplete="off"
               autocorrect="off"
@@ -53,9 +52,6 @@
               shape="round"
               fill="outline"
             ></ion-input>
-           
-            
-            
           </form>
           @if (suggestions.length > 0) {
             <ul class="suggestions">
