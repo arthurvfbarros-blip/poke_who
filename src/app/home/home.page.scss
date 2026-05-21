@@ -306,3 +306,24 @@ ion-toolbar {
 ion-content {
   --background: #F8F8FF;
 }
+.pokedex-top-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.pokedex-button {
+  --background: #ffcb05;
+  --color: #2a75bb;
+
+  font-weight: bold;
+  font-size: 16px;
+
+  --border-radius: 14px;
+
+  height: 45px;
+  width: 170px;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
