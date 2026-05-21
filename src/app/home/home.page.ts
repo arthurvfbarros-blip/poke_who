@@ -153,6 +153,18 @@ export class HomePage implements OnInit {
         this.guesses.unshift({ pokemon: guessed, comparison: this.compare(guessed) });
         if (guessed.id === this.secretPokemon!.id) {
           this.won = true;
+          this.pokemonService.fetchPokemon(name).subscribe({
+            next:(guessed)=> {
+              this.guessing = false;
+              this.guessInput = '';
+              this.guesses.unshift({pokemon: guessed, comparison: this.compare(guessed)});
+
+              if (guessed.id === this.secretPokemon!.id){
+                this.won = true;
+                this.pokemonService.salvarVitoria(this.secretPokemon!, this.guesses.length);
+              }
+            }
+          })
         }
       },
       error: () => {

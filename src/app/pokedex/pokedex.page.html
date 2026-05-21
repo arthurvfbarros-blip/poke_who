@@ -1,8 +1,7 @@
 <ion-header>
   <ion-toolbar color="dark">
-    <ion-title>Pokédex</ion-title>
-
-    <ion-buttons slot = "end">
+    <ion-title>Pokédex e Estatísticas</ion-title>
+    <ion-buttons slot="end">
       <ion-button (click)="voltar()">
         <ion-icon name="close-outline"></ion-icon>
       </ion-button>
@@ -10,26 +9,52 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="pokedex-content">
+<ion-content class="ion-padding">
 
-  <div class="pokedex-info">
-    <h2>Pokémon Descobertos</h2>
-    <p class="tentativas-text">
-      Última partida: {{ tentativas }} tentativa(s)
-    </p>
-    <p>
-      {{ pokemons.length }} encontrados
-    </p>
+  <div class="stats-container" style="display: flex; gap: 10px; margin-bottom: 20px;">
+    
+    <ion-card color="light" style="flex: 1; margin: 0; text-align: center;">
+      <ion-card-header>
+        <ion-icon name="timer-outline" style="font-size: 2rem; color: var(--ion-color-medium);"></ion-icon>
+        <ion-card-title style="font-size: 1rem;">Última</ion-card-title>
+      </ion-card-header>
+      <ion-card-content style="font-size: 1.5rem; font-weight: bold;">
+        {{ ultimaTentativa !== null ? ultimaTentativa : '--' }} <span style="font-size: 0.8rem; font-weight: normal;">tentativas</span>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card color="warning" style="flex: 1; margin: 0; text-align: center;">
+      <ion-card-header>
+        <ion-icon name="trophy-outline" style="font-size: 2rem;"></ion-icon>
+        <ion-card-title style="font-size: 1rem;">Recorde</ion-card-title>
+      </ion-card-header>
+      <ion-card-content style="font-size: 1.5rem; font-weight: bold;">
+        {{ melhorTentativa !== null ? melhorTentativa : '--' }} <span style="font-size: 0.8rem; font-weight: normal;">tentativas</span>
+      </ion-card-content>
+    </ion-card>
+
   </div>
 
-  <div class="pokemon-grid">
-    @for (pokemon of pokemons; track pokemon.id) {
-      <div class="pokemon-card">
-        <img [src]="pokemon.image" [alt]="pokemon.name">
-        <h3>#{{ pokemon.id }}</h3>
-        <p>{{ pokemon.name }}</p>
-      </div>
-    }
-  </div>
+  <h2>Coleção ({{ pokemonsDescobertos.length }})</h2>
+
+  @if (pokemonsDescobertos.length === 0) {
+    <p style="text-align: center; color: gray;">Você ainda não capturou nenhum Pokémon.</p>
+  } @else {
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px;">
+      @for (pokemon of pokemonsDescobertos; track pokemon.id) {
+        <div style="background: white; border-radius: 10px; padding: 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <span style="font-size: 0.8rem; color: gray;">#{{ pokemon.id }}</span>
+          <img [src]="pokemon.image" [alt]="pokemon.name" style="width: 80px; height: 80px;">
+          <h3 style="margin: 5px 0; font-size: 1rem; text-transform: capitalize;">{{ pokemon.name }}</h3>
+          
+          <div style="display: flex; gap: 4px; justify-content: center; flex-wrap: wrap;">
+            @for (tipo of pokemon.types; track tipo) {
+              <span style="font-size: 0.65rem; background: #eee; padding: 2px 6px; border-radius: 4px;">{{ tipo }}</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
 
 </ion-content>

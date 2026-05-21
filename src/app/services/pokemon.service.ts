@@ -88,4 +88,21 @@ export class PokemonService {
     if (id <= 905) return 8; // Galar / Hisui
     return 9;                // Paldea
   }
+
+  salvarVitoria(pokemon: Pokemon,attempts:number): void{
+    const stats = this.obterEstatisticas();
+    stats.push({pokemon,attempts});
+    localStorage.setItem('pokedle_stats', JSON.stringify(stats));
+  }
+  
+  obterEstatisticas(): GameStat[]{
+    const data = localStorage.getItem('pokedle_stats');
+    return data ? JSON.parse(data):[];
+  }
+
+}
+
+export interface GameStat {
+  pokemon: Pokemon;
+  attempts: number;
 }
