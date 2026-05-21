@@ -12,6 +12,9 @@ import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/stan
 })
 export class PokedexPage implements OnInit {
 
+  tentativas: number = 0;
+  pokemons: any[] = []; 
+
   constructor() { }
 
   ngOnInit() {

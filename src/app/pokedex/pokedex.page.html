@@ -1,8 +1,6 @@
 <ion-header>
   <ion-toolbar color="dark">
-    <ion-title>
-      Pokédex
-    </ion-title>
+    <ion-title>Pokédex</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,17 +9,14 @@
   <div class="pokedex-info">
     <h2>Pokémon Descobertos</h2>
     <p class="tentativas-text">
-     Última partida:
-    {{ tentativas }} tentativa(s)
-</p>
-
+      Última partida: {{ tentativas }} tentativa(s)
+    </p>
     <p>
       {{ pokemons.length }} encontrados
     </p>
   </div>
 
   <div class="pokemon-grid">
-
     @for (pokemon of pokemons; track pokemon.id) {
       <div class="pokemon-card">
         <img [src]="pokemon.image" [alt]="pokemon.name">
@@ -29,25 +24,6 @@
         <p>{{ pokemon.name }}</p>
       </div>
     }
-
-       </div>
-    
-
-      <img
-        [src]="pokemon.image"
-        [alt]="pokemon.name"
-      >
-
-      <h3>
-        #{{ pokemon.id }}
-      </h3>
-
-      <p>
-        {{ pokemon.name }}
-      </p>
-
-    </div>
-
   </div>
 
 </ion-content>
