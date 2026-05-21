@@ -1,16 +1,20 @@
 <ion-header>
   <ion-toolbar color="dark">
+    
     <ion-buttons slot="start">
       <ion-button color="danger" (click)="reiniciarEstatisticas()">
         <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
+
     <ion-title>Pokédex e Estatísticas</ion-title>
+    
     <ion-buttons slot="end">
       <ion-button (click)="voltar()">
         <ion-icon name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
@@ -46,25 +50,26 @@
     <p style="text-align: center; color: gray;">Você ainda não capturou nenhum Pokémon.</p>
   } @else {
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px;">
+      
       @for (pokemon of pokemonsDescobertos; track pokemon.id) {
-        <div style="background: white; border-radius: 10px; padding: 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-          <span style="font-size: 0.8rem; color: gray;">#{{ pokemon.id }}</span>
-          <img [src]="pokemon.image" [alt]="pokemon.name" style="width: 80px; height: 80px;">
+        
+        <div style="background: white; border-radius: 10px; padding: 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
           
-          <h3 style="margin: 5px 0; font-size: 0.95rem; font-weight: bold; color: #000;">
-            {{ formatName(pokemon.name) }}
-          </h3>
+          <span style="font-size: 0.8rem; color: gray; display: block;">#{{ pokemon.id }}</span>
           
-          <div style="display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; margin-top: 6px;">
-            @for (tipo of pokemon.types; track tipo) {
-              <span style="font-size: 0.7rem; background: #f0f0f0; padding: 4px 8px; border-radius: 6px; color: #333; font-weight: 500;">
-                {{ tipo | pokemonType }}
-              </span>
-            }
+          <div style="height: 90px; display: flex; align-items: center; justify-content: center; margin: 8px 0;">
+            <img [src]="pokemon.image" [alt]="pokemon.name" style="max-width: 80px; max-height: 80px; object-fit: contain;">
           </div>
-        </div>
-      }
-    </div>
-  }
-
-</ion-content>
+          
+          <div>
+            <h3 style="margin: 0 0 8px 0; font-size: 0.95rem; font-weight: bold; color: #000;">
+              {{ formatName(pokemon.name) }}
+            </h3>
+            
+            <div style="display: flex; gap: 4px; justify-content: center; flex-wrap: wrap;">
+              @for (tipo of pokemon.types; track tipo) {
+                <span style="font-size: 0.7rem; background: #f0f0f0; padding: 4px 8px; border-radius: 6px; color: #333; font-weight: 500;">
+                  {{ tipo | pokemonType }}
+                </span>
+              } </div>
+          </div> </div> } </div> } </ion-content>
