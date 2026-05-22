@@ -44,6 +44,31 @@
 
   </div>
 
+  @if (highlightedPokemon) {
+    <ion-card color="success" style="margin: 0 0 20px 0;">
+      <ion-card-header>
+        <ion-card-title>Último Pokémon descoberto</ion-card-title>
+      </ion-card-header>
+      <ion-card-content style="display: flex; align-items: center; gap: 12px;">
+        <img
+          [src]="highlightedPokemon.image"
+          [alt]="highlightedPokemon.name"
+          style="width: 72px; height: 72px; object-fit: contain;"
+        >
+        <div>
+          <strong>#{{ highlightedPokemon.id }} {{ formatName(highlightedPokemon.name) }}</strong>
+          <div style="margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap;">
+            @for (type of highlightedPokemon.types; track type) {
+              <span style="font-size: 0.75rem; background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 6px; color: #1f1f1f; font-weight: 600;">
+                {{ type | pokemonType }}
+              </span>
+            }
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  }
+
   <h2>Coleção ({{ discoveredPokemon.length }})</h2>
 
   @if (discoveredPokemon.length === 0) {

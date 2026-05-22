@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardContent
 } from '@ionic/angular/standalone';
@@ -23,23 +23,26 @@ import { PokemonTypePipe } from '../home/Tipagem-pokemon.pipe';
   ]
 })
 export class PokedexPage implements OnInit {
+  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly pokemonService = inject(PokemonService);
 
   lastAttempt: number | null = null;
   bestAttempt: number | null = null;
   discoveredPokemon: Pokemon[] = [];
+  highlightedPokemon: Pokemon | null = null;
 
   constructor() {
     addIcons({ closeOutline, trophyOutline, timerOutline, trashOutline });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadData();
   }
 
   loadData(): void {
     const stats: GameStat[] = this.pokemonService.getStats();
+    const highlightedPokemonId = Number(this.route.snapshot.paramMap.get('pokemonId'));
     
     if (stats.length > 0) {
       this.lastAttempt = stats[stats.length - 1].attempts;
@@ -48,7 +51,13 @@ export class PokedexPage implements OnInit {
       const uniquePokemon = new Map<number, Pokemon>();
       stats.forEach((stat) => uniquePokemon.set(stat.pokemon.id, stat.pokemon));
       this.discoveredPokemon = Array.from(uniquePokemon.values());
+      this.highlightedPokemon = this.discoveredPokemon.find(
+        (pokemon) => pokemon.id === highlightedPokemonId
+      ) ?? null;
+      return;
     }
+
+    this.highlightedPokemon = null;
   }
 
   formatName(name: string): string {

@@ -14,6 +14,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pokedex/pokedex.page').then((m) => m.PokedexPage),
   },
   {
+    path: 'pokedex/:pokemonId',
+    loadComponent: () => import('./pokedex/pokedex.page').then((m) => m.PokedexPage),
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',
