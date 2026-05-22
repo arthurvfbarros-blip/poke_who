@@ -10,8 +10,8 @@ export class HoverHighlightDirective {
   @HostBinding('style.--color') color: string = '';
 
   @HostListener('mouseenter') onMouseEnter() {
-    this.background = '#252b44';  // Fundo azul escuro
-    this.color = '#ffffff';        // Letra branca
+    this.background = '#252b44'; // Dark blue background
+    this.color = '#ffffff'; // White text
   }
 
   @HostListener('mouseleave') onMouseLeave() {

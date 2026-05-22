@@ -61,10 +61,10 @@ export class HomePage implements OnInit {
   private readonly pokemonService = inject(PokemonService);
   private searchSubject = new Subject<string>();
   private readonly router = inject(Router);
-  showSilhouette = false;
+  isSilhouetteVisible = false;
 
-  toggleSilhouette(): void {
-    this.showSilhouette = !this.showSilhouette;
+  toggleSilhouetteVisibility(): void {
+    this.isSilhouetteVisible = !this.isSilhouetteVisible;
   }
 
   preventImageDrag(event: DragEvent): void {
@@ -72,14 +72,14 @@ export class HomePage implements OnInit {
   }
   
 
-  secretPokemon: Pokemon | null = null;
+  hiddenPokemon: Pokemon | null = null;
   guesses: GuessResult[] = [];
   guessInput = '';
   suggestions: { name: string; image: string }[] = [];
-  won = false;
-  loading = true;
+  hasWon = false;
+  isLoading = true;
   guessing = false;
-  errorMsg: string | null = null;
+  errorMessage: string | null = null;
   
   
   constructor() {
@@ -88,7 +88,7 @@ export class HomePage implements OnInit {
 
   ngOnInit(): void {
     this.pokemonService.loadAllNames().subscribe();
-    this.loadNewPokemon();
+    this.loadRandomPokemon();
     this.searchSubject.pipe(
       debounceTime(100),
       distinctUntilChanged()
@@ -97,23 +97,23 @@ export class HomePage implements OnInit {
     });
   }
 
-  loadNewPokemon(): void {
-    this.loading = true;
+  loadRandomPokemon(): void {
+    this.isLoading = true;
     this.guesses = [];
-    this.won = false;
+    this.hasWon = false;
     this.guessInput = '';
-    this.errorMsg = null;
-    this.secretPokemon = null;
-    this.showSilhouette = false;
+    this.errorMessage = null;
+    this.hiddenPokemon = null;
+    this.isSilhouetteVisible = false;
 
     this.pokemonService.getRandomPokemon().subscribe({
       next: (pokemon) => {
-        this.secretPokemon = pokemon;
-        this.loading = false;
+        this.hiddenPokemon = pokemon;
+        this.isLoading = false;
       },
       error: () => {
-        this.loading = false;
-        this.errorMsg = 'Erro ao carregar o Pokémon. Tente novamente.';
+        this.isLoading = false;
+        this.errorMessage = 'Erro ao carregar o Pokémon. Tente novamente.';
       },
     });
   }
@@ -143,10 +143,10 @@ export class HomePage implements OnInit {
   submitGuess(event?: Event): void {
     event?.preventDefault();
     const name = this.guessInput.trim().toLowerCase();
-    if (!name || this.won || this.guessing) { return; }
+    if (!name || this.hasWon || this.guessing) { return; }
 
     this.guessing = true;
-    this.errorMsg = null;
+    this.errorMessage = null;
 
     this.pokemonService.fetchPokemon(name).subscribe({
       next: (guessed) => {
@@ -154,14 +154,14 @@ export class HomePage implements OnInit {
         this.guessInput = '';
         this.guesses.unshift({ pokemon: guessed, comparison: this.compare(guessed) });
         
-        if (guessed.id === this.secretPokemon!.id) {
-          this.won = true;
-          this.pokemonService.salvarVitoria(this.secretPokemon!, this.guesses.length);
+        if (guessed.id === this.hiddenPokemon!.id) {
+          this.hasWon = true;
+          this.pokemonService.saveVictory(this.hiddenPokemon!, this.guesses.length);
         }
       },
       error: () => {
         this.guessing = false;
-        this.errorMsg = 'Pokémon não encontrado. Verifique o nome e tente novamente.';
+        this.errorMessage = 'Pokémon não encontrado. Verifique o nome e tente novamente.';
       },
     });
   }
@@ -172,12 +172,12 @@ export class HomePage implements OnInit {
     this.submitGuess(new Event('submit'));
   }
 
-  newGame(): void {
-    this.loadNewPokemon();
+  startNewGame(): void {
+    this.loadRandomPokemon();
   }
 
-  abrirPokedex():void {
-    this.router.navigate(['/pokedex'])
+  openPokedex(): void {
+    this.router.navigate(['/pokedex']);
   }
 
   formatName(name: string): string {
@@ -188,7 +188,7 @@ export class HomePage implements OnInit {
   }
 
   private compare(guessed: Pokemon): GuessComparison {
-    const secret = this.secretPokemon!;
+    const secret = this.hiddenPokemon!;
     return {
       generation: this.compareNum(guessed.generation, secret.generation),
       types: this.compareTypesIndividually(guessed.types, secret.types),
@@ -203,26 +203,26 @@ export class HomePage implements OnInit {
   }
 
   private compareTypesIndividually(guessed: string[], secret: string[]): TypeComparison[] {
-    // Se o Pokémon tem só 1 tipo, duplicamos para preencher os dois blocos
+    // Single-type Pokemon are duplicated so both comparison slots stay aligned.
     const gTypes = guessed.length === 1 ? [guessed[0], guessed[0]] : [guessed[0], guessed[1]];
     const sTypes = secret.length === 1 ? [secret[0], secret[0]] : [secret[0], secret[1]];
 
     const result: TypeComparison[] = [];
 
     if (gTypes[0] === sTypes[0]) {
-      result.push({ name: gTypes[0], status: 'correct' }); // Posição certa (Verde)
+      result.push({ name: gTypes[0], status: 'correct' });
     } else if (gTypes[0] === sTypes[1]) {
-      result.push({ name: gTypes[0], status: 'partial' }); // Posição errada (Amarelo)
+      result.push({ name: gTypes[0], status: 'partial' });
     } else {
-      result.push({ name: gTypes[0], status: 'wrong' });   // Não tem (Vermelho)
+      result.push({ name: gTypes[0], status: 'wrong' });
     }
 
     if (gTypes[1] === sTypes[1]) {
-      result.push({ name: gTypes[1], status: 'correct' }); // Posição certa (Verde)
+      result.push({ name: gTypes[1], status: 'correct' });
     } else if (gTypes[1] === sTypes[0]) {
-      result.push({ name: gTypes[1], status: 'partial' }); // Posição errada (Amarelo)
+      result.push({ name: gTypes[1], status: 'partial' });
     } else {
-      result.push({ name: gTypes[1], status: 'wrong' });   // Não tem (Vermelho)
+      result.push({ name: gTypes[1], status: 'wrong' });
     }
 
     return result;

@@ -2,7 +2,7 @@
   <ion-toolbar color="dark">
     
     <ion-buttons slot="start">
-      <ion-button color="danger" (click)="reiniciarEstatisticas()">
+      <ion-button color="danger" (click)="resetStats()">
         <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -10,7 +10,7 @@
     <ion-title>Pokédex e Estatísticas</ion-title>
     
     <ion-buttons slot="end">
-      <ion-button (click)="voltar()">
+      <ion-button (click)="goBack()">
         <ion-icon name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -28,7 +28,7 @@
         <ion-card-title style="font-size: 1rem;">Última</ion-card-title>
       </ion-card-header>
       <ion-card-content style="font-size: 1.5rem; font-weight: bold;">
-        {{ ultimaTentativa !== null ? ultimaTentativa : '--' }} <span style="font-size: 0.8rem; font-weight: normal;">tentativas</span>
+        {{ lastAttempt !== null ? lastAttempt : '--' }} <span style="font-size: 0.8rem; font-weight: normal;">tentativas</span>
       </ion-card-content>
     </ion-card>
 
@@ -38,20 +38,20 @@
         <ion-card-title style="font-size: 1rem;">Recorde</ion-card-title>
       </ion-card-header>
       <ion-card-content style="font-size: 1.5rem; font-weight: bold;">
-        {{ melhorTentativa !== null ? melhorTentativa : '--' }} <span style="font-size: 0.8rem; font-weight: normal;">tentativas</span>
+        {{ bestAttempt !== null ? bestAttempt : '--' }} <span style="font-size: 0.8rem; font-weight: normal;">tentativas</span>
       </ion-card-content>
     </ion-card>
 
   </div>
 
-  <h2>Coleção ({{ pokemonsDescobertos.length }})</h2>
+  <h2>Coleção ({{ discoveredPokemon.length }})</h2>
 
-  @if (pokemonsDescobertos.length === 0) {
+  @if (discoveredPokemon.length === 0) {
     <p style="text-align: center; color: gray;">Você ainda não capturou nenhum Pokémon.</p>
   } @else {
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px;">
       
-      @for (pokemon of pokemonsDescobertos; track pokemon.id) {
+      @for (pokemon of discoveredPokemon; track pokemon.id) {
         
         <div style="background: white; border-radius: 10px; padding: 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
           
@@ -67,9 +67,9 @@
             </h3>
             
             <div style="display: flex; gap: 4px; justify-content: center; flex-wrap: wrap;">
-              @for (tipo of pokemon.types; track tipo) {
+              @for (type of pokemon.types; track type) {
                 <span style="font-size: 0.7rem; background: #f0f0f0; padding: 4px 8px; border-radius: 6px; color: #333; font-weight: 500;">
-                  {{ tipo | pokemonType }}
+                  {{ type | pokemonType }}
                 </span>
               } </div>
           </div> </div> } </div> } </ion-content>

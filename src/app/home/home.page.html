@@ -7,40 +7,40 @@
 <ion-content [fullscreen]="true">
 <div class="game-container">
 
-  @if (!loading && secretPokemon && !won) {
+  @if (!isLoading && hiddenPokemon && !hasWon) {
     <div style="display: flex; justify-content: center; margin-bottom: 12px;">
       <ion-button appHoverHighlight
        class="btn-facilitar"           
        fill="outline" size="small" 
-       (click)="toggleSilhouette()">
-        {{ showSilhouette ? 'Ocultar Silhueta' : 'Facilitar (Mostrar Silhueta)' }}
+       (click)="toggleSilhouetteVisibility()">
+        {{ isSilhouetteVisible ? 'Ocultar Silhueta' : 'Facilitar (Mostrar Silhueta)' }}
       </ion-button>
     </div>
   }
 
-  @if (!loading && secretPokemon) {
+  @if (!isLoading && hiddenPokemon) {
     <div class="image-wrapper">
       <img
-        [src]="secretPokemon.image"
-        [alt]="won ? secretPokemon.name : '???'"
-        [class.silhouette]="!won"
-        [class.hide-silhouette]="!showSilhouette && !won"
+        [src]="hiddenPokemon.image"
+        [alt]="hasWon ? hiddenPokemon.name : '???'"
+        [class.silhouette]="!hasWon"
+        [class.hide-silhouette]="!isSilhouetteVisible && !hasWon"
         class="pokemon-image"
         draggable="false"
         (dragstart)="preventImageDrag($event)"
       />
 
-      @if (won) {
+      @if (hasWon) {
         <div class="victory-banner">
           <h2>🎉 Você acertou!</h2>
           <p>Foram necessárias <strong>{{ guesses.length }}</strong> tentativa(s).</p>
-          <ion-button expand="block" color="success" (click)="newGame()">
+          <ion-button expand="block" color="success" (click)="startNewGame()">
             Novo Jogo
           </ion-button>
         </div>
       }
 
-      @if (!won) {
+      @if (!hasWon) {
         <div class="input-area">
           <form (submit)="submitGuess($event)">
             <ion-input
@@ -66,8 +66,8 @@
               }
             </ul>
           }
-          @if (errorMsg) {
-            <p class="error-msg">{{ errorMsg }}</p>
+          @if (errorMessage) {
+            <p class="error-msg">{{ errorMessage }}</p>
           }
         </div>
       }
@@ -134,16 +134,16 @@
               }
             </span>
           </div>
-          } </div> } </div> } @if (!loading && !secretPokemon && errorMsg) {
+          } </div> } </div> } @if (!isLoading && !hiddenPokemon && errorMessage) {
     <div class="error-state">
-      <p>{{ errorMsg }}</p>
-      <ion-button color="danger" (click)="loadNewPokemon()">Tentar Novamente</ion-button>
+      <p>{{ errorMessage }}</p>
+      <ion-button color="danger" (click)="loadRandomPokemon()">Tentar Novamente</ion-button>
     </div>
   }
     
 </div> 
 <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-<ion-fab-button color="tertiary" (click)="abrirPokedex()">
+<ion-fab-button color="tertiary" (click)="openPokedex()">
   <ion-icon name="book-outline"></ion-icon>
 </ion-fab-button>
 </ion-fab>

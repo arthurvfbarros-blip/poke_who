@@ -8,7 +8,7 @@ import {
 import { addIcons } from 'ionicons';
 import { closeOutline, trophyOutline, timerOutline, trashOutline } from 'ionicons/icons';
 
-import { PokemonService, Pokemon, GameStat } from '../services/pokemon.service'; 
+import { PokemonService, Pokemon, GameStat } from '../services/pokemon.service';
 import { PokemonTypePipe } from '../home/Tipagem-pokemon.pipe';
 
 @Component({
@@ -26,28 +26,28 @@ export class PokedexPage implements OnInit {
   private readonly router = inject(Router);
   private readonly pokemonService = inject(PokemonService);
 
-  ultimaTentativa: number | null = null;
-  melhorTentativa: number | null = null;
-  pokemonsDescobertos: Pokemon[] = [];
+  lastAttempt: number | null = null;
+  bestAttempt: number | null = null;
+  discoveredPokemon: Pokemon[] = [];
 
   constructor() {
     addIcons({ closeOutline, trophyOutline, timerOutline, trashOutline });
   }
 
   ngOnInit() {
-    this.carregarDados();
+    this.loadData();
   }
 
-  carregarDados() {
-    const stats: GameStat[] = this.pokemonService.obterEstatisticas();
+  loadData(): void {
+    const stats: GameStat[] = this.pokemonService.getStats();
     
     if (stats.length > 0) {
-      this.ultimaTentativa = stats[stats.length - 1].attempts;
-      this.melhorTentativa = Math.min(...stats.map(s => s.attempts));
+      this.lastAttempt = stats[stats.length - 1].attempts;
+      this.bestAttempt = Math.min(...stats.map(s => s.attempts));
 
-      const unicos = new Map<number, Pokemon>();
-      stats.forEach(s => unicos.set(s.pokemon.id, s.pokemon));
-      this.pokemonsDescobertos = Array.from(unicos.values());
+      const uniquePokemon = new Map<number, Pokemon>();
+      stats.forEach((stat) => uniquePokemon.set(stat.pokemon.id, stat.pokemon));
+      this.discoveredPokemon = Array.from(uniquePokemon.values());
     }
   }
 
@@ -58,15 +58,14 @@ export class PokedexPage implements OnInit {
       .join(' ');
   }
 
-  voltar(): void {
+  goBack(): void {
     this.router.navigate(['/home']);
   }
 
-  reiniciarEstatisticas(): void{
-    this.pokemonService.limparEstatisticas();
-    this.ultimaTentativa = null;
-    this.melhorTentativa = null;
-    this.pokemonsDescobertos = [];
+  resetStats(): void {
+    this.pokemonService.clearStats();
+    this.lastAttempt = null;
+    this.bestAttempt = null;
+    this.discoveredPokemon = [];
   }
-
 }

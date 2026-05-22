@@ -11,10 +11,10 @@ describe('PokedexPage', () => {
 
   beforeEach(async () => {
     pokemonServiceSpy = jasmine.createSpyObj('PokemonService', [
-      'obterEstatisticas',
-      'limparEstatisticas',
+      'getStats',
+      'clearStats',
     ]);
-    pokemonServiceSpy.obterEstatisticas.and.returnValue([]);
+    pokemonServiceSpy.getStats.and.returnValue([]);
 
     await TestBed.configureTestingModule({
       imports: [PokedexPage],

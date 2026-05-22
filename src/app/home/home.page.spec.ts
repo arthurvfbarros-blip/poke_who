@@ -22,16 +22,15 @@ describe('HomePage', () => {
   let pokemonServiceSpy: jasmine.SpyObj<PokemonService>;
 
   beforeEach(async () => {
-    // 1. Adicionamos os métodos novos ao Spy (dublê)
     pokemonServiceSpy = jasmine.createSpyObj('PokemonService', [
       'getRandomPokemon',
       'fetchPokemon',
       'loadAllNames',
       'getSuggestions',
-      'getPokemonImage'
+      'getPokemonImage',
+      'saveVictory',
     ]);
 
-    // 2. Simulamos o retorno das requisições para evitar erros de "undefined" ou "subscribe is not a function"
     pokemonServiceSpy.getRandomPokemon.and.returnValue(of(mockPokemon));
     pokemonServiceSpy.fetchPokemon.and.returnValue(of(mockPokemon));
     pokemonServiceSpy.loadAllNames.and.returnValue(of([] as any));
@@ -57,8 +56,8 @@ describe('HomePage', () => {
 
   it('should load a random pokémon on init', () => {
     expect(pokemonServiceSpy.getRandomPokemon).toHaveBeenCalledTimes(1);
-    expect(component.secretPokemon).toEqual(mockPokemon);
-    expect(component.loading).toBeFalse();
+    expect(component.hiddenPokemon).toEqual(mockPokemon);
+    expect(component.isLoading).toBeFalse();
   });
 
   it('should add a guess to history on submitGuess', () => {
@@ -68,14 +67,14 @@ describe('HomePage', () => {
     expect(component.guesses.length).toBe(1);
   });
 
-  it('should set won to true when correct pokémon is guessed', () => {
+  it('should set hasWon to true when correct pokémon is guessed', () => {
     component.guessInput = 'pikachu';
     component.submitGuess();
-    expect(component.won).toBeTrue();
+    expect(component.hasWon).toBeTrue();
   });
 
-  it('should reset state on newGame', () => {
-    component.won = true;
+  it('should reset state on startNewGame', () => {
+    component.hasWon = true;
     component.guesses = [{ 
       pokemon: mockPokemon, 
       comparison: { 
@@ -85,10 +84,10 @@ describe('HomePage', () => {
         weight: 'correct' 
       } 
     }];    
-    component.newGame();
+    component.startNewGame();
     
     expect(pokemonServiceSpy.getRandomPokemon).toHaveBeenCalledTimes(2);
-    expect(component.won).toBeFalse();
+    expect(component.hasWon).toBeFalse();
     expect(component.guesses.length).toBe(0);
   });
 

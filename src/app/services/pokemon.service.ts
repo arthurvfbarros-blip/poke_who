@@ -23,7 +23,7 @@ const GENERATION_MAX_IDS = [
   721, // Kalos
   809, // Alola
   905, // Galar / Hisui
-  // Acima disso: Paldea
+  // Above this: Paldea
 ];
 
 @Injectable({ providedIn: 'root' })
@@ -80,21 +80,20 @@ export class PokemonService {
     return generationIndex === -1 ? GENERATION_MAX_IDS.length + 1 : generationIndex + 1;
   }
 
-  salvarVitoria(pokemon: Pokemon, attempts: number): void {
-    const stats = this.obterEstatisticas();
+  saveVictory(pokemon: Pokemon, attempts: number): void {
+    const stats = this.getStats();
     stats.push({ pokemon, attempts });
     localStorage.setItem('pokedle_stats', JSON.stringify(stats));
   }
 
-  obterEstatisticas(): GameStat[] {
+  getStats(): GameStat[] {
     const data = localStorage.getItem('pokedle_stats');
     return data ? JSON.parse(data) : [];
   }
 
-  limparEstatisticas(): void {
+  clearStats(): void {
     localStorage.removeItem('pokedle_stats');
   }
-
 }
 
 export interface GameStat {
