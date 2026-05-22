@@ -42,7 +42,8 @@ export class PokedexPage implements OnInit {
 
   loadData(): void {
     const stats: GameStat[] = this.pokemonService.getStats();
-    const highlightedPokemonId = Number(this.route.snapshot.paramMap.get('pokemonId'));
+    // Pega o parâmetro da rota como string para podermos verificar se ele existe
+    const paramId = this.route.snapshot.paramMap.get('pokemonId');
     
     if (stats.length > 0) {
       this.lastAttempt = stats[stats.length - 1].attempts;
@@ -51,9 +52,15 @@ export class PokedexPage implements OnInit {
       const uniquePokemon = new Map<number, Pokemon>();
       stats.forEach((stat) => uniquePokemon.set(stat.pokemon.id, stat.pokemon));
       this.discoveredPokemon = Array.from(uniquePokemon.values());
-      this.highlightedPokemon = this.discoveredPokemon.find(
-        (pokemon) => pokemon.id === highlightedPokemonId
-      ) ?? null;
+      
+      if (paramId) {
+        const highlightedPokemonId = Number(paramId);
+        this.highlightedPokemon = this.discoveredPokemon.find(
+          (pokemon) => pokemon.id === highlightedPokemonId
+        ) ?? null;
+      } else {
+        this.highlightedPokemon = stats[stats.length - 1].pokemon;
+      }
       return;
     }
 
@@ -76,5 +83,6 @@ export class PokedexPage implements OnInit {
     this.lastAttempt = null;
     this.bestAttempt = null;
     this.discoveredPokemon = [];
+    this.highlightedPokemon = null;
   }
 }
