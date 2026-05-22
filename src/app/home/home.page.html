@@ -24,7 +24,10 @@
         [src]="secretPokemon.image"
         [alt]="won ? secretPokemon.name : '???'"
         [class.silhouette]="!won"
-        [class.hide-silhouette]="!showSilhouette && !won" class="pokemon-image"
+        [class.hide-silhouette]="!showSilhouette && !won"
+        class="pokemon-image"
+        draggable="false"
+        (dragstart)="preventImageDrag($event)"
       />
 
       @if (won) {
@@ -145,4 +148,3 @@
 </ion-fab-button>
 </ion-fab>
 </ion-content>
-

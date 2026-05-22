@@ -1,49 +1,30 @@
 ion-input {
-  --background: #ffffff ;        
-  --border-radius: 12px;        
-  --border-color: transparent;   
-  --placeholder-color: #333 ;
-  --placeholder-opacity: 1 ;        
+  --background: #ffffff;
+  --border-radius: 12px;
+  --border-color: transparent;
+  --placeholder-color: #333;
+  --placeholder-opacity: 1;
 }
-
 
 ion-toolbar {
-  --background: #252b44 !important;  // Verde escuro
-  --color: #ffffff !important;        // Letra branca
+  --background: #252b44 !important;
+  --color: #ffffff !important;
 }
+
 .game-container {
   padding: 16px;
   max-width: 600px;
   margin: 0 auto;
-  color: #333;   
-  font-weight: bold; 
+  color: #333;
+  font-weight: bold;
 }
+
 .btn-facilitar {
-  --color: #333333 ;
-  --border-color: #333333 ;
-  font-weight: bold ;
+  --color: #333333;
+  --border-color: #333333;
+  font-weight: bold;
   transition: all 0.3s ease;
 }
-// Loading
-
-.loading-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 48px 0;
-
-  ion-spinner {
-    width: 48px;
-    height: 48px;
-  }
-
-  p {
-    margin-top: 12px;
-    color: var(--ion-color-medium);
-  }
-}
-
-// Pokemon image
 
 .image-wrapper {
   text-align: center;
@@ -54,50 +35,40 @@ ion-toolbar {
     height: 200px;
     object-fit: contain;
     transition: filter 0.6s ease;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    touch-action: none;
 
     &.silhouette {
       filter: brightness(0);
     }
   }
-
-  .pokemon-name {
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin: 8px 0 2px;
-    text-transform: capitalize;
-  }
-
-  .pokemon-id {
-    color: var(--ion-color-medium);
-    margin: 0;
-  }
 }
 
 .hide-silhouette {
-  opacity: 0 !important; // Torna a imagem invisível, mas mantém o espaço dela
-  pointer-events: none;  // Evita que o usuário tente arrastar ou clicar na imagem invisível
+  opacity: 0 !important;
+  pointer-events: none;
 }
 
 .guess-name {
   display: flex;
-  align-items: center; // Centraliza a imagem e o texto verticalmente
-  gap: 8px; // Espaço entre a imagem e o nome
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
   font-weight: 600;
   font-size: 0.85rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  
 }
 
 .history-image {
   width: 32px;
   height: 32px;
   object-fit: contain;
-  flex-shrink: 0; // Impede a imagem de ser espremida se o nome for grande
+  flex-shrink: 0;
 }
-
-// Victory banner
 
 .victory-banner {
   text-align: center;
@@ -116,11 +87,8 @@ ion-toolbar {
   }
 }
 
-// Input area
-
 .input-area {
   margin-bottom: 4px;
-  
 
   form {
     display: flex;
@@ -146,13 +114,10 @@ ion-toolbar {
     display: flex;
     align-items: center;
     gap: 8px;
-    
 
     &:last-child {
       border-bottom: none;
     }
-
-    
   }
 }
 
@@ -168,32 +133,26 @@ ion-toolbar {
   margin: 4px 2px 0;
 }
 
-// Attempt counter
-
 .attempt-counter {
   text-align: center;
   font-size: 0.9rem;
-  color:  #333; 
+  color: #333;
   margin: 12px 0 8px;
-  font-weight: bold;   
-
+  font-weight: bold;
 }
-
-// Guess history
 
 .history-header {
   display: grid;
-  // Aumentamos a primeira coluna para 2.8fr e equilibramos o resto:
   grid-template-columns: 2.8fr 1fr 1.5fr 1fr 1.2fr;
-  gap: 6px; // Um respiro um pouquinho maior entre as colunas
+  gap: 6px;
   padding: 4px 8px;
   font-size: 0.7rem;
   font-weight: 600;
-  color: #333;   
+  color: #333;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  text-align: center; // Centraliza os títulos
-  font-weight: bold;     
+  text-align: center;
+  font-weight: bold;
 }
 
 .guess-history {
@@ -209,21 +168,9 @@ ion-toolbar {
   align-items: center;
   padding: 8px;
   border-radius: 10px;
-  background: #ffffff;  
+  background: #ffffff;
   border: 1px solid #eee;
-}
-
-.guess-name {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; // Garante que fique alinhado à esquerda
-  gap: 8px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #000000; 
+  color: #000000;
 }
 
 .cell {
@@ -265,20 +212,16 @@ ion-toolbar {
   }
 }
 
-// Error state
-
 .error-state {
   text-align: center;
   padding: 48px 0;
 }
 
-// Célula tipagem
-
 .type-cell-container {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  background: transparent; // Remove a cor padrão da célula para focar nos badges
+  background: transparent;
 }
 
 .type-badge {
@@ -293,7 +236,7 @@ ion-toolbar {
   }
 
   &--partial {
-    background: var(--ion-color-warning); // Amarelo nativo do Ionic
+    background: var(--ion-color-warning);
     color: var(--ion-color-warning-contrast);
   }
 
@@ -302,10 +245,11 @@ ion-toolbar {
     color: var(--ion-color-danger-contrast);
   }
 }
-// COR DE FUNDO DA PÁGINA
+
 ion-content {
   --background: #F8F8FF;
 }
+
 .pokedex-top-button {
   display: flex;
   justify-content: center;

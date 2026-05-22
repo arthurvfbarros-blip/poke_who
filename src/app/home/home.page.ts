@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, HostListener, HostBinding   } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { PokemonTypePipe } from './Tipagem-pokemon.pipe';
 import { Subject } from 'rxjs';
@@ -11,7 +11,6 @@ import {
   IonContent,
   IonInput,
   IonButton,
-  IonSpinner,
   IonIcon, IonFab, IonFabButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowUp, arrowDown, checkmarkOutline, bookOutline } from 'ionicons/icons';
@@ -50,7 +49,6 @@ export interface GuessResult {
     IonContent,
     IonInput,
     IonButton,
-    IonSpinner,
     IonIcon,
     DecimalPipe,
     PokemonTypePipe,
@@ -67,6 +65,10 @@ export class HomePage implements OnInit {
 
   toggleSilhouette(): void {
     this.showSilhouette = !this.showSilhouette;
+  }
+
+  preventImageDrag(event: DragEvent): void {
+    event.preventDefault();
   }
   
 
