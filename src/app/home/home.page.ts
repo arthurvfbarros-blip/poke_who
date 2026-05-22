@@ -13,7 +13,7 @@ import {
   IonButton,
   IonIcon, IonFab, IonFabButton } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowUp, arrowDown, checkmarkOutline, bookOutline } from 'ionicons/icons';
+import { arrowUp, arrowDown, checkmarkOutline, bookOutline, helpCircleOutline } from 'ionicons/icons';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -83,7 +83,7 @@ export class HomePage implements OnInit {
   
   
   constructor() {
-    addIcons({ arrowUp, arrowDown, checkmarkOutline, bookOutline });
+    addIcons({ arrowUp, arrowDown, checkmarkOutline, bookOutline, helpCircleOutline });
   }
 
   ngOnInit(): void {
@@ -178,6 +178,10 @@ export class HomePage implements OnInit {
 
   openPokedex(): void {
     this.router.navigate(['/pokedex']);
+  }
+
+  openRules(): void {
+    this.router.navigate(['/rules']);
   }
 
   formatName(name: string): string {

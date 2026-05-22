@@ -6,12 +6,16 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
   },
   {
+    path: 'rules',
+    loadComponent: () => import('./rules/rules.page').then((m) => m.RulesPage),
+  },
+  {
+    path: 'pokedex',
+    loadComponent: () => import('./pokedex/pokedex.page').then((m) => m.PokedexPage),
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',
-  },  {
-    path: 'pokedex',
-    loadComponent: () => import('./pokedex/pokedex.page').then( m => m.PokedexPage)
   },
-
 ];

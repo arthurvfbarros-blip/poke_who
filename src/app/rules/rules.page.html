@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title>Como Jogar</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="goBack()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <section class="intro-card">
+    <div class="intro-icon">
+      <ion-icon name="help-circle-outline"></ion-icon>
+    </div>
+    <h2>Descubra o Pokémon escondido</h2>
+    <p>
+      Digite o nome de um Pokémon, envie o palpite e use a tabela de feedback para
+      chegar à resposta certa.
+    </p>
+  </section>
+
+  <ion-list lines="none" class="rules-list">
+    <ion-item>
+      <ion-label>
+        <h3>1. Comece chutando</h3>
+        <p>Digite o nome de um Pokémon e escolha uma sugestão da lista se precisar.</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3>2. Leia o feedback</h3>
+        <p>
+          Geração, altura e peso comparam o seu palpite com o Pokémon escondido.
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3>3. Use as cores</h3>
+        <p>Verde significa correto. Amarelo indica perto ou presente em outra posição. Vermelho significa errado.</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3>4. Observe as setas</h3>
+        <p>
+          A seta para cima indica que o Pokémon escondido tem valor maior. A seta
+          para baixo indica valor menor.
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3>5. Revele a silhueta se quiser</h3>
+        <p>
+          O botão de ajuda pode mostrar o formato da silhueta, mas a meta continua
+          sendo acertar o Pokémon com o menor número de tentativas possível.
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
