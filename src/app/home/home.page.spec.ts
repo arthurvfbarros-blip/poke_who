@@ -1,5 +1,6 @@
 /// <reference types="jasmine" />
 import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { Router, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { provideIonicAngular } from '@ionic/angular/standalone';
 
@@ -20,6 +21,7 @@ describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
   let pokemonServiceSpy: jasmine.SpyObj<PokemonService>;
+  let router: Router;
 
   beforeEach(async () => {
     pokemonServiceSpy = jasmine.createSpyObj('PokemonService', [
@@ -41,10 +43,12 @@ describe('HomePage', () => {
       imports: [HomePage],
       providers: [
         provideIonicAngular(),
+        provideRouter([]),
         { provide: PokemonService, useValue: pokemonServiceSpy },
       ],
     }).compileComponents();
 
+    router = TestBed.inject(Router);
     fixture = TestBed.createComponent(HomePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -94,5 +98,23 @@ describe('HomePage', () => {
   it('should format name with hyphens correctly', () => {
     expect(component.formatName('mr-mime')).toBe('Mr Mime');
     expect(component.formatName('pikachu')).toBe('Pikachu');
+  });
+
+  it('should open pokedex without route parameter before victory', () => {
+    spyOn(router, 'navigate');
+
+    component.openPokedex();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/pokedex']);
+  });
+
+  it('should open pokedex with pokemon id after victory', () => {
+    spyOn(router, 'navigate');
+    component.hasWon = true;
+    component.hiddenPokemon = mockPokemon;
+
+    component.openPokedex();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/pokedex', mockPokemon.id]);
   });
 });

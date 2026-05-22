@@ -177,6 +177,11 @@ export class HomePage implements OnInit {
   }
 
   openPokedex(): void {
+    if (this.hasWon && this.hiddenPokemon) {
+      this.router.navigate(['/pokedex', this.hiddenPokemon.id]);
+      return;
+    }
+
     this.router.navigate(['/pokedex']);
   }
 
