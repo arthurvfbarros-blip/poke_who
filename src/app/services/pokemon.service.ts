@@ -13,19 +13,18 @@ export interface Pokemon {
   image: string;
 }
 
-const GENERATIONS = [
-  'generation-i',
-  'generation-ii',
-  'generation-iii',
-  'generation-iv',
-  'generation-v',
-  'generation-vi',
-  'generation-vii',
-  'generation-viii',
-  'generation-ix',
-];
-
 const TOTAL_POKEMON = 1350;
+const GENERATION_MAX_IDS = [
+  151, // Kanto
+  251, // Johto
+  386, // Hoenn
+  493, // Sinnoh
+  649, // Unova
+  721, // Kalos
+  809, // Alola
+  905, // Galar / Hisui
+  // Acima disso: Paldea
+];
 
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
@@ -68,7 +67,7 @@ export class PokemonService {
     return {
       id: data.id as number,
       name: data.name as string,
-      generation: this.detectGeneration(data.id), // 👈 Mude de data.sprites para data.id
+      generation: this.detectGeneration(data.id as number),
       types: (data.types as any[]).map((t) => t.type.name as string),
       height: (data.height as number) / 10,
       weight: (data.weight as number) / 10,
@@ -76,28 +75,20 @@ export class PokemonService {
     };
   }
 
-  // Substitua a função inteira por esta:
   private detectGeneration(id: number): number {
-    if (id <= 151) return 1; // Kanto
-    if (id <= 251) return 2; // Johto
-    if (id <= 386) return 3; // Hoenn
-    if (id <= 493) return 4; // Sinnoh
-    if (id <= 649) return 5; // Unova
-    if (id <= 721) return 6; // Kalos
-    if (id <= 809) return 7; // Alola
-    if (id <= 905) return 8; // Galar / Hisui
-    return 9;                // Paldea
+    const generationIndex = GENERATION_MAX_IDS.findIndex((maxId) => id <= maxId);
+    return generationIndex === -1 ? GENERATION_MAX_IDS.length + 1 : generationIndex + 1;
   }
 
-  salvarVitoria(pokemon: Pokemon,attempts:number): void{
+  salvarVitoria(pokemon: Pokemon, attempts: number): void {
     const stats = this.obterEstatisticas();
-    stats.push({pokemon,attempts});
+    stats.push({ pokemon, attempts });
     localStorage.setItem('pokedle_stats', JSON.stringify(stats));
   }
-  
-  obterEstatisticas(): GameStat[]{
+
+  obterEstatisticas(): GameStat[] {
     const data = localStorage.getItem('pokedle_stats');
-    return data ? JSON.parse(data):[];
+    return data ? JSON.parse(data) : [];
   }
 
   limparEstatisticas(): void {

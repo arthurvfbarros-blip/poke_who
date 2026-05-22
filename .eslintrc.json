@@ -4,6 +4,7 @@
   "overrides": [
     {
       "files": ["*.ts"],
+      "plugins": ["@typescript-eslint"],
       "parserOptions": {
         "project": ["tsconfig.json"],
         "createDefaultProgram": true
@@ -33,6 +34,15 @@
             "type": "attribute",
             "prefix": "app",
             "style": "camelCase"
+          }
+        ],
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_",
+            "caughtErrorsIgnorePattern": "^_"
           }
         ]
       }
